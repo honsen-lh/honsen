@@ -1,0 +1,164 @@
+1.MySQL中存在float,double等非标准数据类型，也有decimal这种标准数据类型。
+其区别在于，float，double等非标准类型，在DB中保存的是近似值，而Decimal则以字符串的形式保存数值。
+float，double类型是可以存浮点数（即小数类型），但是float有个坏处，当你给定的数据是整数的时候，那么它就以整数给你处理。
+这样我们在存取货币值的时候自然遇到问题，我的default值为：0.00而实际存储是0，同样我存取货币为12.00，实际存储是12
+============
+2.web.xml加载顺序：context-param->listener -> filter -> servlet
+SSM框架 启动tomcat 加载顺序：web.xml中spring的applicationContext.xml文件 -- spring的监听器 -- 
+
+3.maven打包没有xml文件解决：
+		<resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
+		
+4.swich（） case 遇到break 停止没有break执行default
+
+5.sql执行顺序：select –>where –> group by–> having–>order by
+
+6.linux 下清屏  clear 或 ctrl+l(小写l)
+
+7.192.168.150.101 root	密码：F0rtUne32
+lmsvrnts0006：D0llioU83
+
+SVN:Honsen
+2mRqS3Rq62GAkWuA
+
+
+8.MK ,coach ,Furla ,Kate spade,Mulberry,ysl,Longchamps,Tory Burchs
+=====================================DUBBO================================
+9.dubbo支持多种类型的注册中心：
+
+  Multicast注册中心
+  Zookeeper注册中心
+  Redis注册中心
+  Simple注册中心
+  Dubbo建议使用Zookeeper作为服务的注册中心。
+10.Dubbo 是什么：
+一款分布式服务框架
+高性能和透明化的RPC远程服务调用方案
+SOA服务治理方案
+11.Dubbo缺省协议采用单一长连接和NIO异步通讯，适合于小数据量大并发的服务调用，以及服务消费者机器数远大于服务提供者机器数的情况。
+ 
+12.通过@Reference注解,dubbo会在扫描的时候会自动帮我们代理接口（见下图）,然后通过rpc调用远程服务。@service ：在注册中心注册服务
+group
+当一个接口有多种实现时，可以用group区分。
+version
+当一个接口的实现，出现不兼容升级时，可以用版本号过渡，版本号不同的服务相互间不引用。
+接口升级时，要注意方法： 
+* 在低压力时间段，先升级一半的提供者为新版本； 
+* 再将所有的消费者升级为新版本； 
+* 然后将剩下的一半提供者升级为新版本；
+@service(version=1.0.0) -- @reference(version=1.0.0)
+@service(version=2.0.0) -- @reference(version=2.0.0)
+@service(version=2.0.0)/@service(version=2.0.0)..不区分版本   -- @reference(version=*)   仅限2.2.0版本以上支持
+如果服务提供者使用了版本，消费者引入该服务时候，version字段不能为空。
+=============================================================================
+Spring Dubbo 注解无效，空指针？
+dubbo-provider.xml:提供者先扫描spring框架，完成spring部分的扫描，然后将为dubbo框架提供服务；dubbo-consumer.xml 消费者部分相反，先扫描dubbo服务，后扫描spring部分。
+dubbo-consumer.xml在 spring-mvc.xml中第一句引入。（先扫描dubbo配置，再扫描spring-mvc配置） dubbo-provider.xml 在spring-context.xml最后引入。（先扫描spring配置，再扫描dubbo配置）
+
+ZooKeeper 是一个开源的分布式协调服务。
+==============================================
+spring 多数据源配置 ：1.配置多个数据源，引入数据源配置文件
+					  2.mapper.xml文件 表名前面加上库名
+@Primary和@Qualifier这两个注解的意思：　　
+
+@Primary：  意思是在众多相同的bean中，优先使用用@Primary注解的bean.
+@Qualifier ： 这个注解则指定某个bean有没有资格进行注入。
+@Qualifier("XXX") 中的 XX是 Bean 的名称，所以 @Autowired 和 @Qualifier 结合使用时，自动注入的策略就从 byType 转变成 byName 了。
+------------------
+Spring帮助我们管理Bean分为两个部分，一个是注册Bean，一个装配Bean。
+完成这两个动作有三种方式，一种是使用自动配置的方式、一种是使用JavaConfig的方式，一种就是使用XML配置的方式。
+在自动配置的方式中，使用@Component去告诉Spring，我是一个bean，你要来管理我，然后使用@AutoWired注解去装配Bean(所谓装配，就是管理对象直接的协作关系)。
+然后在JavaConfig中，@Configuration其实就是告诉spring，spring容器要怎么配置（怎么去注册bean，怎么去处理bean之间的关系（装配））。
+那么就很好理解了，@Bean的意思就是，我要获取这个bean的时候，你spring要按照这种方式去帮我获取到这个bean。
+到了使用xml的方式，也是如此。君不见<bean>标签就是告诉spring怎么获取这个bean，各种<ref>就是手动的配置bean之间的关系。
+@Configuration可理解为用spring的时候xml里面的<beans>标签
+
+@Bean可理解为用spring的时候xml里面的<bean>标签
+用@Bean注解的方法：会实例化、配置并初始化一个新的对象，这个对象会由spring IoC 容器管理。
+
+@Autowired 与@Resource的区别：
+1、 @Autowired与@Resource都可以用来装配bean. 都可以写在字段上,或写在setter方法上。
+2、 @Autowired默认按类型装配（这个注解是属业spring的），默认情况下必须要求依赖对象必须存在，
+如果要允许null值，可以设置它的required属性为false，如：@Autowired(required=false) ，如果我们想使用名称装配可以结合@Qualifier注解进行使用，如下：
+@Autowired()@Qualifier("baseDao")
+private BaseDao baseDao;
+
+3、@Resource（这个注解属于J2EE的），默认按照名称进行装配，名称可以通过name属性进行指定，如果没有指定name属性，当注解写在字段上时，
+默认取字段名进行安装名称查找，如果注解写在setter方法上默认取属性名进行装配。当找不到与名称匹配的bean时才按照类型进行装配。
+
+@Resource(name="baseDao")
+private BaseDao baseDao;
+推荐使用：@Resource注解在字段上，这样就不用写setter方法了，并且这个注解是属于J2EE的，减少了与spring的耦合。这样代码看起就比较优雅。
+
+spring 整合 mybatis，有了 Spring 托管数据源，在 MyBatis 配置文件中仅仅需要关注性能化配置。
+spring 整合 springmvc，若Spring的IOC容器和SpringMVC的IOC容器扫描的包有重合的部分，就会导致有的bean会被创建2次
+===================================================
+创建dubbo项目： 第一个子模块选择创建maven module -- 然后勾上create a simple project -- next -- 打包方式选择pom -- finish -- 删掉src文件夹 只留一个pom文件
+第二个子模块 选择创建maven module -- 不勾create a simple project -- 输入module name之后选择maven项目类型为quickstart -- finish
+
+CRUD sql：1.UPDATE table1 a  
+LEFT JOIN table2 b ON a.id = b.id 
+SET a.fee = b.fee
+=============================================
+关于 maven 打包：第三方jar包  打包到war 或者xml打包到war
+<build>
+		<finalName>bison-start</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.7.0</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<encoding>UTF-8</encoding>
+					<!-- 将lib目录可能有的jar包打包进war -->
+					<compilerArguments>
+						<extdirs>${project.basedir}\src\main\webapp\WEB-INF\lib</extdirs>
+					</compilerArguments>
+				</configuration>
+			</plugin>
+		</plugins>
+		<!-- 将xml打包进war -->
+		<resources>
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.xml</include>
+				</includes>
+				<filtering>false</filtering>
+			</resource>
+		</resources>
+	</build>
+springcloud 之Ribbon：
+ Ribbon是Netflix发布的开源项目，主要功能是提供客户端的软件负载均衡算法，将Netflix的中间层服务连接在一起。
+ Ribbon客户端组件提供一系列完善的配置项如连接超时，重试等。简单的说，就是在配置文件中列出Load Balancer（简称LB）后面所有的机器，
+ Ribbon会自动的帮助你基于某种规则（如简单轮询，随即连接等）去连接这些机器。
+Eureka(尤瑞卡)： 
+Eureka是Netflix开发的服务发现框架，本身是一个基于REST的服务，主要用于定位运行在AWS域中的中间层服务，以达到负载均衡和中间层服务故障转移的目的。
+SpringCloud将它集成在其子项目spring-cloud-netflix中，以实现SpringCloud的服务发现功能。	
+分布式是否属于微服务？答案是肯定的。微服务的意思也就是将模块拆分成一个独立的服务单元通过接口来实现数据的交互。
+
+分布式：一个业务拆分为多个子业务，部署在多个服务器上 。 
+集群：同一个业务，部署在多个服务器上 。	
+
+springboot支持https访问：证书生成 执行：keytool -genkey -alias tomcat  -storetype PKCS12 -keyalg RSA -keysize 2048  -keystore keystore.p12 -validity 3650
+设置口令全为123456		
+
+java中类加载时机：
+
+1）使用new关键字实例化对象
+
+2）读取一个类的静态字段（被final修饰、已在编译期把结果放在常量池的静态字段除外）
+
+3）设置一个类的静态字段（被final修饰、已在编译期把结果放在常量池的静态字段除外）
+
+4）调用一个类的静态方法	  
