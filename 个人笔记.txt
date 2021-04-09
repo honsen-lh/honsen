@@ -25,7 +25,12 @@ SSM框架 启动tomcat 加载顺序：web.xml中spring的applicationContext.xml�
 
 7.192.168.150.101 root	密码：F0rtUne32
 lmsvrnts0006：D0llioU83
-
+47.91.78.254 服务器账号root 密码：F0rtUne32
+ssh命令：例:传输文件 scp /usr/local/springcloud-client/eureka/wr-gateway.jar  root@10.0.100.11:/usr/local/springcloud-client/eureka/ 
+	      进入ssh服务器：ssh root@10.0.100.11
+scp /usr/local/springcloud-client/eureka/WarrantyRegistration-service-8001.jar  root@10.0.100.11:/usr/local/springcloud-client/nginx_client/
+scp /usr/local/springcloud-client/eureka/  root@10.0.100.11:/usr/local/springcloud-client/nginx_client/
+java多态：
 SVN:Honsen
 2mRqS3Rq62GAkWuA
 
@@ -161,8 +166,8 @@ java中类加载时机：
 
 3）设置一个类的静态字段（被final修饰、已在编译期把结果放在常量池的静态字段除外）
 
-4）调用一个类的静态方法	  
-===============================
+4）调用一个类的静态方法	 
+==============================================================
 ﻿1.springcloud和springboot的区别：
     SpringBoot专注于快速方便的开发单个个体微服务。
     SpringCloud是关注全局的微服务协调整理治理框架，它将SpringBoot开发的一个个单体微服务整合并管理起来，
@@ -170,4 +175,202 @@ java中类加载时机：
     SpringBoot可以离开SpringCloud独立开发项目，但是SpringCloud离不开SpringBoot，属于依赖关系。
     SpringBoot专注于快速、方便的开发单个微服务个体，SpringCloud关注全局的服务治理框架。
 2.spring、springMvc、springBoot和springCloud的联系与区别:
-   https://blog.csdn.net/alan_liuyue/article/details/80656687
+   https://blog.csdn.net/alan_liuyue/article/details/80656687 
+   
+
+变量多态看左边， 
+方法多态看右边， 
+静态多态看左边。
+java多态：
+  所谓多态就是指程序中定义的引用变量所指向的具体类型和通过该引用变量发出的方法调用在编程时并不确定，而是在程序运行期间才确定，
+  即一个引用变量到底会指向哪个类的实例对象，该引用变量发出的方法调用到底是哪个类中实现的方法，必须在由程序运行期间才能决定。
+  因为在程序运行时才确定具体的类，这样，不用修改源程序代码，就可以让引用变量绑定到各种不同的类实现上，从而导致该引用变量调用的具体方法随之改变，
+  即不修改程序代码就可以改变程序运行时所绑定的具体代码，让程序可以选择多个运行状态，这就是多态性
+==================================================================================================
+ 分布式系统领域 定理CAP:
+	CAP的3进2：
+        最多只能同时较好的满足两个。
+         CAP理论的核心是：一个分布式系统不可能同时很好的满足一致性，可用性和
+         分区容错性这三个需求。
+         因此，根据CAP原理将NoSQL数据库分成了满足CA原则、满足CP原则
+         和满足AP原则三大类；
+        CA-单点集群，满足一致性，可用性的系统，通常在课扩展性上不太强大。
+        CP-满足一致性，分区容错性的系统，通常性能不是特别高。
+        AP-满足可用性，分区容错性的系统，通常可能对一致性要求低一些
+ 而由于当前的网络硬件肯定会出现延迟丢包等问题，所以分区容错性是我们必须要实现的。
+   所以我们只能在一致性和可用性之间进行权衡，没有NoSQL系统能同时保证这三点 
+==========================================================================
+Eureka 和 Zookeeper区别？
+     Eureka是遵守AP原则
+     Zookeeper是遵守CP原则     
+     Zookeeper保证CP原则：
+         1.1当向注册中心查询服务列表时，我们可以容忍注册中心返回的是几分钟以前的注册信息，
+  但不能接受服务直接down掉不可用。也就是说，服务注册功能对可用性的要求高于一致性。
+  但是zk会出现这一种情况，当master节点因为网络故障与其他节点失去联系时，剩余注册
+  功能就会重新进行leader选举看。问题在于，选举leader的时间太长，30~120s，且选举期间
+  整个zk集群都是不可用的，这就导致在选举期间注册服务瘫痪。在云部署的环境下，因网络问题
+  使得zk集群失去master节点是较大概率会发生的事，虽然服务能够最终恢复，但是漫长的
+  选举时间导致的注册长期不可用是不能容忍的。
+        1.2Eureka看明白了这一点，因此在设计时就优先保证可用性。Eureka各个节点都是平等
+  的，几个节点挂掉不会影响正常节点的工作，剩余节点依然可以提供注册和查询服务。
+  而Eureka的客户端在向某个Eureka注册或者如果发现链接失败时，则会自动切换至其他节点，
+  只要有一台Eureka还在，就能保证注册服务可用（保证可用），只不过查到的信息可能不是
+  最新的（不保证一致性）。除此以外，Eureka还有一种自我保护机制，如果在15分钟内超过85%
+  的节点都没有正常的心跳，那么Eureka就认为客户端与注册中心出现了网络故障，此时会出现
+  一下几种情况：
+      （1）Eureka不在从注册列表中移除因为长时间没收到心跳而应该过期的服务
+      （2）Eureka仍然能够接受新服务的注册和查询请求，但是不会被同步到其他节点上
+               （保证当前节点依然可用）
+      （3）当网络稳定时，当前实例新的注册信息会被同步到其他节点中
+  因此，Eureka可以很好的应对因网络故障导致部分节点失去联系的情况，而不会像zk那样
+     是整个注册服务瘫痪。
+
+=============================
+在使用继承时需要记住三句话：
+
+         1、子类拥有父类非private的属性和方法。
+
+         2、子类可以拥有自己属性和方法，即子类可以对父类进行扩展。
+
+         3、子类可以用自己的方式实现父类的方法。
+		
+多线程就是分时利用CPU，宏观上让所有线程一起执行 ，也叫并发		
+====================================================
+堆和栈的区别：
+栈：存放基本类型的变量数据和对象的引用，但对象本身不存放在栈中，而是存放在堆（new 出来的对象）或者常量池中（字符串常量对象存放在常量池中。） 
+堆：存放所有new出来的对象。 
+栈内存归属于单个线程，每个线程都会有一个栈内存，其存储的变量只能在其所属线程中可见，即栈内存可以理解成线程的私有内存。而堆内存中的对象对所有线程可见。堆内存中的对象可以被所有线程访问。
+栈分为3个部分：基本类型变量区、执行环境上下文、操作指令区(存放操作指令)。	
+jvm只有堆区(heap)和方法区(下面)被所有线程共享，堆中不存放基本类型和对象引用，只存放对象本身	
+静态区/方法区:
+1.方法区又叫静态区，跟堆一样，被所有的线程共享。方法区包含所有的class和static变量。
+2.方法区中包含的都是在整个程序中永远唯一的元素，如class，static变量。
+3.全局变量和静态变量的存储是放在一块的，初始化的全局变量和静态变量在一块区域， 未初始化的全局变量和未初始化的静态变量在相邻的另一块区域。
+1、堆用来存储new出来的对象和数组
+
+2、栈用来存储基本类型变量和对象的引用变量的地址
+
+3、方法区存储方法和static变量
+=====================================
+JVM 堆分区和非堆, 堆区域分为年轻代和老年代, 年轻代分为 Eden区和Servivor form Servivor to , 比例为8:1, 
+当一个对象创建的时候先进入的是Eden, 当第一次垃圾回收的时候进入 Servivor from ,当再次垃圾回收的时候利用复制算法到Servivor to区, 
+然后 to 和from 更好位置实现复制算法,减少碎片浪费,复制算法只能年轻代使用, 为什么会有分区的出现,主要是为了提高GC扫描堆的时候提高效率,
+因为很多对象符合朝生夕死的特点, 标记整理和清楚适合老年代
+==========================================
+线程是进程的一个实体。
+
+进程——资源分配的最小单位，线程——程序执行的最小单位。
+============================================
+冒泡排序：
+for(int i =0;i<array.length;i++){
+            for(int j =0;j<array.length-1-i;j++){
+                if(array[j+1]<array[j]){
+                    int temp = array[j+1];
+                    array[j+1] =array[j];
+                    array[j] = temp;
+                }
+            }
+
+        }
+选择排序：
+for(int i =0;i<array.length;i++){
+            int min = i;
+            for (int j = i; j <array.length ; j++) {
+
+                min = j;      if(array[j]<array[min]){
+                }
+            }
+            int temp = array[min];
+            array[min] = array[i];
+            array[i] = temp;
+        }
+============================================
+分布式和微服务区别：分布式属于微服务
+去饭店吃饭就是一个完整的业务，饭店的厨师、配菜师、传菜员、服务员就是分布式；厨师、配菜师、传菜员和服务员都不止一个人，这就是集群；
+分布式就是微服务的一种表现形式，分布式是部署层面，微服务是设计层面。
+===============================================
+在Spring的AOP编程中：
+如果加入容器的目标对象有实现接口，用JDK代理
+如果目标对象没有实现接口，用Cglib代理		
+==========================================
+单例模式：
+饿汉式
+public class HungrySingleton
+{
+    private static final HungrySingleton instance=new HungrySingleton();
+    private HungrySingleton(){}
+    public static HungrySingleton getInstance()
+    {
+        return instance;
+    }
+}
+懒汉式：
+public class LazySingleton
+{
+    public static void main(String[] args)
+    {
+        President zt1=President.getInstance();
+        zt1.getName();    //输出总统的名字
+        President zt2=President.getInstance();
+        zt2.getName();    //输出总统的名字
+        if(zt1==zt2)
+        {
+           System.out.println("他们是同一人！");
+        }
+        else
+        {
+           System.out.println("他们不是同一人！");
+        }
+    }
+}
+class President
+{
+    private static volatile President instance=null;    //保证instance在所有线程中同步
+    //private避免类在外部被实例化
+    private President()
+    {
+        System.out.println("产生一个总统！");
+    }
+    public static synchronized President getInstance()
+    {
+        //在getInstance方法上加同步
+        if(instance==null)
+        {
+               instance=new President();
+        }
+        else
+        {
+           System.out.println("已经有一个总统，不能产生新总统！");
+        }
+        return instance;
+    }
+    public void getName()
+    {
+        System.out.println("我是美国总统：特朗普。");
+    }  
+}
+====================================================
+String s = new String(“hello”)会创建2（1）个对象，String s = “hello”创建1（0）个对象。 
+注：当字符串常量池中有对象hello时括号内成立！
+字符串如果是变量相加，先开空间，在拼接。
+字符串如果是常量相加，是先加，然后在常量池找，如果有就直接返回，否则，就创建。
+===================================================================================
+关于integer和int：
+  ①无论如何，Integer与new Integer不会相等。不会经历拆箱过程，i3的引用指向堆，而i4指向专门存放他的内存（常量池），他们的内存地址不一样，所以为false
+  ②两个都是非new出来的Integer，如果数在-128到127之间，则是true,否则为false
+  java在编译Integer i2 = 128的时候,被翻译成-> Integer i2 = Integer.valueOf(128);而valueOf()函数会对-128到127之间的数进行缓存
+  ③两个都是new出来的,都为false
+  ④int和integer(无论new否)比，都为true，因为会把Integer自动拆箱为int再去比
+==========================================
+用tkmybatis时 pojo类对象 要加@table(表名) @id（对应表主键） 忽略字段用 @Transient
+
+自动点request  ：http://localhost:10789/demo/execute/Amazon.co.uk
+
+
+所有的源代码很多时候是用来阅读的，只有很少的时间是用来执行的。
+========================================================\
+阿里云控制台：子账号 ：miaophy@1931056452267454.onaliyun.com 密碼:Ldm@2019.
+ 10.0.50.101 密码123
+====================================
+对静态代理、JDK动态代理、CGLib动态代理做一个总结，静态代理的维护成本比较高，有一个被代理类就需要创建一个代理类，而且需要实现相同的接口。JDK动态代理模式和CGLib动态代理的区别是JDK动态代理需要被代理类实现接口，
+而CGLib则是生成被代理类的子类，要求被代理类不能是final的，因为final类无法被继承。
